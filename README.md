@@ -1,5 +1,9 @@
 # P1 meter to MQTT
-This Platform IO project should enable an ESP to read in data from a P1 energy meter and push this data in JSON format to specified MQTT broker.
+This Platform IO project should enable an ESP to read in data from a P1 energy meter and push this data in JSON format to a specified MQTT broker.
+
+![](general_overview.JPG)
+
+This meter situates itself inside a bigger project (see picture).
 
 ## MQTT output
 One device can send data on multiple topics. The top level topic for a device is the MAC-address. Underneath this top level, there are three possible topics:
