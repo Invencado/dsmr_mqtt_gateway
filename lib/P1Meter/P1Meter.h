@@ -21,14 +21,14 @@ private:
     // * Set during CRC checking
     unsigned int currentCRC = 0;
 
-    StaticJsonDocument<245> actual_values;
-    StaticJsonDocument<245> counters;
+    StaticJsonDocument<1024> actual_values;
+    StaticJsonDocument<1024> counters;
 
 public:
     P1Meter();
     bool read_p1_hardwareserial();
-    StaticJsonDocument<245> get_actual_values();
-    StaticJsonDocument<245> get_counters();
+    StaticJsonDocument<1024> get_actual_values();
+    StaticJsonDocument<1024> get_counters();
 };
 
 #endif
