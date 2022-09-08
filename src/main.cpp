@@ -188,11 +188,12 @@ void setup() {
 // * P1                             *
 // **********************************
 
-void send_data_to_broker(StaticJsonDocument<245> counters, StaticJsonDocument<245> actual_values){
+void send_data_to_broker(StaticJsonDocument<1050> counters, StaticJsonDocument<1050> actual_values){
   /*
-   * Messages are split up to keep beneath the 256 byte size limit of the messages.
+   * Messages are split up to keep beneath the 1050 byte size limit of the messages.
    * All messages get the same timestamp so that telegram can be put together based on this timestamp afterwards
    */
+  publish_message("status/connection", "{\"connected\":1}", false);
 
   String timestamp = String(NTP.micros());
   //data
@@ -208,8 +209,8 @@ void send_data_to_broker(StaticJsonDocument<245> counters, StaticJsonDocument<24
   publish_message("data/actual_values", actual_values_output.c_str(), false);
 }
 
-StaticJsonDocument<245> counters;
-StaticJsonDocument<245> actual_values;
+StaticJsonDocument<1050> counters;
+StaticJsonDocument<1050> actual_values;
 
 void loop() {
   // put your main code here, to run repeatedly:
@@ -223,7 +224,7 @@ void loop() {
         if (result){
           counters = p1Client.get_counters();
           actual_values = p1Client.get_actual_values();
-          send_data_to_broker(counters, actual_values);
+          send_data_to_broker(counters, actual_values);          
           LAST_UPDATE_SENT = millis();
           digitalWrite(LED, !digitalRead(LED));
         }  
