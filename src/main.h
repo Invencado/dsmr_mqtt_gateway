@@ -2,6 +2,7 @@
 #include "P1Meter.h"
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 #include <PubSubClient.h>
+#define MQTT_MAX_PACKET_SIZE 2048
 #include <ESPNtpClient.h> //https://github.com/gmag11/ESPNtpClient
 #include <ArduinoJson.h>
 #include <token.h>

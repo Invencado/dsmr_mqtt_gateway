@@ -310,10 +310,10 @@ bool P1Meter::read_p1_hardwareserial()
     return result;
 }
 
-StaticJsonDocument<245> P1Meter::get_actual_values(){
+StaticJsonDocument<1024> P1Meter::get_actual_values(){
     return actual_values;
 }
 
-StaticJsonDocument<245> P1Meter::get_counters(){
+StaticJsonDocument<1024> P1Meter::get_counters(){
     return counters;
 }
