@@ -50,3 +50,4 @@ Since this is a public repository and I do not know how to properly hide tokens,
 
 The file should contain a line like this one:
 #define MQTT_USERNAME "FlespiToken this_is_a_secret_token"
+#define MQTT_PASSWORD "Some secret password you always use"

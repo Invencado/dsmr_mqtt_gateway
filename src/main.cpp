@@ -30,7 +30,7 @@ void reconnect() {
 
     //connection_topic
     String last_will_topic = path + "/status/connection";
-    if (client.connect(clientId.c_str(), MQTT_USERNAME, "", last_will_topic.c_str(), 0, true, "{\"connected\":0}")) {
+    if (client.connect(clientId.c_str(), MQTT_USERNAME, MQTT_PASSWORD, last_will_topic.c_str(), 0, true, "{\"connected\":0}")) {
       send_status_update("on_reconnect");
       client.subscribe((path + "/cmd/request_status").c_str());
       reconnection_attempts = 0;
