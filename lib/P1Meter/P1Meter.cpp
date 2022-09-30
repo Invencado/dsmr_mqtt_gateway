@@ -116,169 +116,125 @@ bool P1Meter::decode_telegram(int len) {
         currentCRC = CRC16(currentCRC, (unsigned char*) telegram, len);
     }
 
-
-    // 1-0:1.8.1(000992.992*kWh)
-    // 1-0:1.8.1 = Elektra verbruik laag tarief (DSMR v4.0)
     if (strncmp(telegram, "1-0:1.8.1", strlen("1-0:1.8.1")) == 0)
     {
         counters["con_lt"] = getValue(telegram, len, '(', '*');
     }
 
-    // 1-0:1.8.2(000560.157*kWh)
-    // 1-0:1.8.2 = Elektra verbruik hoog tarief (DSMR v4.0)
     if (strncmp(telegram, "1-0:1.8.2", strlen("1-0:1.8.2")) == 0)
     {
         counters["con_ht"] = getValue(telegram, len, '(', '*');
     }
   
-    // 1-0:2.8.1(000560.157*kWh)
-    // 1-0:2.8.1 = Elektra teruglevering laag tarief (DSMR v4.0)
     if (strncmp(telegram, "1-0:2.8.1", strlen("1-0:2.8.1")) == 0)
     {
         counters["ret_lt"] = getValue(telegram, len, '(', '*');
     }
 
-    // 1-0:2.8.2(000560.157*kWh)
-    // 1-0:2.8.2 = Elektra teruglevering hoog tarief (DSMR v4.0)
     if (strncmp(telegram, "1-0:2.8.2", strlen("1-0:2.8.2")) == 0)
     {
         counters["ret_ht"] = getValue(telegram, len, '(', '*');
     }
 
-    // 1-0:1.7.0(00.424*kW) Actueel verbruik
-    // 1-0:1.7.x = Electricity consumption actual usage (DSMR v4.0)
-    if (strncmp(telegram, "1-0:1.7.0", strlen("1-0:1.7.0")) == 0)
-    {
-        actual_values["con"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:2.7.0(00.000*kW) Actuele teruglevering (-P) in 1 Watt resolution
-    if (strncmp(telegram, "1-0:2.7.0", strlen("1-0:2.7.0")) == 0)
-    {
-        actual_values["ret"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:21.7.0(00.378*kW)
-    // 1-0:21.7.0 = Instantaan vermogen Elektriciteit verbruik L1
-    if (strncmp(telegram, "1-0:21.7.0", strlen("1-0:21.7.0")) == 0)
-    {
-        actual_values["con_l1"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:41.7.0(00.378*kW)
-    // 1-0:41.7.0 = Instantaan vermogen Elektriciteit verbruik L2
-    if (strncmp(telegram, "1-0:41.7.0", strlen("1-0:41.7.0")) == 0)
-    {
-        actual_values["con_l2"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:61.7.0(00.378*kW)
-    // 1-0:61.7.0 = Instantaan vermogen Elektriciteit verbruik L3
-    if (strncmp(telegram, "1-0:61.7.0", strlen("1-0:61.7.0")) == 0)
-    {
-        actual_values["con_l3"] = getValue(telegram, len, '(', '*');
-    }
-
-        // 1-0:21.7.0(00.378*kW)
-    // 1-0:21.7.0 = Instantaan vermogen Elektriciteit injectie L1
-    if (strncmp(telegram, "1-0:22.7.0", strlen("1-0:22.7.0")) == 0)
-    {
-        actual_values["ret_l1"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:41.7.0(00.378*kW)
-    // 1-0:41.7.0 = Instantaan vermogen Elektriciteit injectie L2
-    if (strncmp(telegram, "1-0:42.7.0", strlen("1-0:42.7.0")) == 0)
-    {
-        actual_values["ret_l2"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:61.7.0(00.378*kW)
-    // 1-0:61.7.0 = Instantaan vermogen Elektriciteit injectie L3
-    if (strncmp(telegram, "1-0:62.7.0", strlen("1-0:62.7.0")) == 0)
-    {
-        actual_values["ret_l3"] = getValue(telegram, len, '(', '*');
-    }
-
-    // 1-0:31.7.0(002*A)
-    // 1-0:31.7.0 = Instantane stroom Elektriciteit L1
-    if (strncmp(telegram, "1-0:31.7.0", strlen("1-0:31.7.0")) == 0)
-    {
-        actual_values["cur_l1"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
-    }
-    // 1-0:51.7.0(002*A)
-    // 1-0:51.7.0 = Instantane stroom Elektriciteit L2
-    if (strncmp(telegram, "1-0:51.7.0", strlen("1-0:51.7.0")) == 0)
-    {
-        actual_values["cur_l2"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
-    }
-    // 1-0:71.7.0(002*A)
-    // 1-0:71.7.0 = Instantane stroom Elektriciteit L3
-    if (strncmp(telegram, "1-0:71.7.0", strlen("1-0:71.7.0")) == 0)
-    {
-        actual_values["cur_l3"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;;
-    }
-
-    // 1-0:32.7.0(232.0*V)
-    // 1-0:32.7.0 = Voltage L1
-    if (strncmp(telegram, "1-0:32.7.0", strlen("1-0:32.7.0")) == 0)
-    {
-        actual_values["vol_l1"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
-    }
-    // 1-0:52.7.0(232.0*V)
-    // 1-0:52.7.0 = Voltage L2
-    if (strncmp(telegram, "1-0:52.7.0", strlen("1-0:52.7.0")) == 0)
-    {
-        actual_values["vol_l2"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
-    }   
-    // 1-0:72.7.0(232.0*V)
-    // 1-0:72.7.0 = Voltage L3
-    if (strncmp(telegram, "1-0:72.7.0", strlen("1-0:72.7.0")) == 0)
-    {
-        actual_values["vol_l3"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
-    }
-
-    // 0-0:96.14.0(0001)
-    // 0-0:96.14.0 = Actual Tarif
-    if (strncmp(telegram, "0-0:96.14.0", strlen("0-0:96.14.0")) == 0)
-    {
-        actual_values["tarif"] = getValue(telegram, len, '(', ')');
-    }
-
-        // 0-0:96.7.21(00003)
-    // 0-0:96.7.21 = Aantal onderbrekingen Elektriciteit
     if (strncmp(telegram, "0-0:96.7.21", strlen("0-0:96.7.21")) == 0)
     {
         counters["short_out"] = getValue(telegram, len, '(', ')');
     }
 
-    // 0-0:96.7.9(00001)
-    // 0-0:96.7.9 = Aantal lange onderbrekingen Elektriciteit
     if (strncmp(telegram, "0-0:96.7.9", strlen("0-0:96.7.9")) == 0)
     {
         counters["long_out"] = getValue(telegram, len, '(', ')');
     }
 
-    // 1-0:32.32.0(00000)
-    // 1-0:32.32.0 = Aantal korte spanningsdalingen Elektriciteit in fase 1
     if (strncmp(telegram, "1-0:32.32.0", strlen("1-0:32.32.0")) == 0)
     {
         counters["short_drop"] = getValue(telegram, len, '(', ')');
     }
 
-    // 1-0:32.36.0(00000)
-    // 1-0:32.36.0 = Aantal korte spanningsstijgingen Elektriciteit in fase 1
     if (strncmp(telegram, "1-0:32.36.0", strlen("1-0:32.36.0")) == 0)
     {
         counters["long_drop"] = getValue(telegram, len, '(', ')');
     }
 
-    // 0-1:24.2.1(150531200000S)(00811.923*m3)
-    // 0-1:24.2.1 = Gas (DSMR v4.0) on Kaifa MA105 meter
     if (strncmp(telegram, "0-1:24.2.1", strlen("0-1:24.2.1")) == 0)
     {
         counters["gas"] = getValue(telegram, len, '(', '*');
     }
+
+    if (strncmp(telegram, "1-0:1.7.0", strlen("1-0:1.7.0")) == 0)
+    {
+        actual_values["con"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:2.7.0", strlen("1-0:2.7.0")) == 0)
+    {
+        actual_values["ret"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:21.7.0", strlen("1-0:21.7.0")) == 0)
+    {
+        actual_values["con_l1"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:41.7.0", strlen("1-0:41.7.0")) == 0)
+    {
+        actual_values["con_l2"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:61.7.0", strlen("1-0:61.7.0")) == 0)
+    {
+        actual_values["con_l3"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:22.7.0", strlen("1-0:22.7.0")) == 0)
+    {
+        actual_values["ret_l1"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:42.7.0", strlen("1-0:42.7.0")) == 0)
+    {
+        actual_values["ret_l2"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:62.7.0", strlen("1-0:62.7.0")) == 0)
+    {
+        actual_values["ret_l3"] = getValue(telegram, len, '(', '*');
+    }
+
+    if (strncmp(telegram, "1-0:31.7.0", strlen("1-0:31.7.0")) == 0)
+    {
+        actual_values["cur_l1"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
+    }
+
+    if (strncmp(telegram, "1-0:51.7.0", strlen("1-0:51.7.0")) == 0)
+    {
+        actual_values["cur_l2"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
+    }
+
+    if (strncmp(telegram, "1-0:71.7.0", strlen("1-0:71.7.0")) == 0)
+    {
+        actual_values["cur_l3"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;;
+    }
+
+    if (strncmp(telegram, "1-0:32.7.0", strlen("1-0:32.7.0")) == 0)
+    {
+        actual_values["vol_l1"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
+    }
+
+    if (strncmp(telegram, "1-0:52.7.0", strlen("1-0:52.7.0")) == 0)
+    {
+        actual_values["vol_l2"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
+    }   
+
+    if (strncmp(telegram, "1-0:72.7.0", strlen("1-0:72.7.0")) == 0)
+    {
+        actual_values["vol_l3"] = getValue(telegram, len, '(', '*')* 1.0 / 1000.0;
+    }
+
+    if (strncmp(telegram, "0-0:96.14.0", strlen("0-0:96.14.0")) == 0)
+    {
+        actual_values["tarif"] = getValue(telegram, len, '(', ')');
+    } 
     return validCRCFound;
 }
 
