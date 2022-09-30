@@ -139,6 +139,7 @@ void setup_mqttclient() {
   //MQTT client
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(callback);
+  client.setBufferSize(1024);
   reconnect();
 }
 
@@ -188,9 +189,9 @@ void setup() {
 // * P1                             *
 // **********************************
 
-void send_data_to_broker(StaticJsonDocument<1050> counters, StaticJsonDocument<1050> actual_values){
+void send_data_to_broker(StaticJsonDocument<1024> counters, StaticJsonDocument<1024> actual_values){
   /*
-   * Messages are split up to keep beneath the 1050 byte size limit of the messages.
+   * Messages are split up to keep beneath the 1024 byte size limit of the messages.
    * All messages get the same timestamp so that telegram can be put together based on this timestamp afterwards
    */
   publish_message("status/connection", "{\"connected\":1}", false);
@@ -209,8 +210,8 @@ void send_data_to_broker(StaticJsonDocument<1050> counters, StaticJsonDocument<1
   publish_message("data/actual_values", actual_values_output.c_str(), false);
 }
 
-StaticJsonDocument<1050> counters;
-StaticJsonDocument<1050> actual_values;
+StaticJsonDocument<1024> counters;
+StaticJsonDocument<1024> actual_values;
 
 void loop() {
   // put your main code here, to run repeatedly:
